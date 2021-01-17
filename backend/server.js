@@ -4,12 +4,16 @@ import products from './data/products.js';
 import connectDB from './config/db.js';
 import colors from 'colors';
 
+//loading .env file in the backend to process.env
 dotenv.config();
 
+//Connecting to the Database
 connectDB();
 
+//Initialising App
 const app = express();
 
+//API routes
 app.get('/', (req, res) => {
   res.send(`Api running...`);
 });
@@ -21,6 +25,7 @@ app.get(`/api/products/:id`, (req, res) => {
   res.json(product);
 });
 
+//Server Starting
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
   console.log(
