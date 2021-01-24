@@ -2,22 +2,34 @@ import React, { useEffect } from 'react';
 import Message from './../components/Message';
 import Loader from './../components/Loader';
 import { LinkContainer } from 'react-router-bootstrap';
-import { listUsers } from './../actions/userActions';
+import { listUsers, deleteUser } from './../actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { Table, Button } from 'react-bootstrap';
 
-const UserListScreen = () => {
+const UserListScreen = ({ history }) => {
   const dispatch = useDispatch();
 
   const userList = useSelector((state) => state.userList);
   const { users, loading, error } = userList;
 
-  useEffect(() => {
-    dispatch(listUsers());
-  }, [dispatch]);
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
-  const deleteHandler = (user) => {
-    console.log('delete');
+  const userDelete = useSelector((state) => state.userDelete);
+  const { success } = userDelete;
+
+  useEffect(() => {
+    if (userInfo && userInfo.isAdmin) {
+      dispatch(listUsers());
+    } else {
+      history.push('/login');
+    }
+  }, [dispatch, history, userInfo, success]);
+
+  const deleteHandler = (id) => {
+    if (window.confirm('Are you sure?')) {
+      dispatch(deleteUser(id));
+    }
   };
 
   return (
@@ -28,7 +40,7 @@ const UserListScreen = () => {
       ) : error ? (
         <Message variant='danger'>{error}</Message>
       ) : (
-        <Table striped hover responsive bordered>
+        <Table striped hover responsive bordered className='table-sm'>
           <thead>
             <tr>
               <th>ID</th>
@@ -44,8 +56,7 @@ const UserListScreen = () => {
                 <td>{user._id}</td>
                 <td>{user.name}</td>
                 <td>
-                  <a href={`mailto:${user.email}`}></a>
-                  {user.email}
+                  <a href={`mailto:${user.email}`}>{user.email}</a>
                 </td>
                 <td>
                   {user.isAdmin ? (
@@ -63,7 +74,7 @@ const UserListScreen = () => {
                   <Button
                     variant='danger'
                     className='btn-sm'
-                    onClick={() => deleteHandler(user)}
+                    onClick={() => deleteHandler(user._id)}
                   >
                     <i className='fas fa-trash' />
                   </Button>
