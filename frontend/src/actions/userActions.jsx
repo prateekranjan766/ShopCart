@@ -3,11 +3,12 @@ import {
   USER_DETAILS_FAIL,
   USER_DETAILS_REQUEST,
   USER_DETAILS_SUCCESS,
+  USER_DETAILS_RESET,
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
   USER_LOGOUT,
-  USER_REGISTER_CLEAR,
+  USER_REGISTER_RESET,
   USER_REGISTER_FAIL,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
@@ -15,6 +16,8 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
 } from './../constants/userConstants';
+
+import { ORDER_LIST_MY_RESET } from './../constants/orderConstants';
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -48,8 +51,10 @@ export const login = (email, password) => async (dispatch) => {
 
 export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo');
+  dispatch({ type: USER_REGISTER_RESET });
+  dispatch({ type: USER_DETAILS_RESET });
+  dispatch({ type: ORDER_LIST_MY_RESET });
   dispatch({ type: USER_LOGOUT });
-  dispatch({ type: USER_REGISTER_CLEAR });
 };
 
 export const register = (name, email, password) => async (dispatch) => {
