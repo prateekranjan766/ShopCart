@@ -1,4 +1,5 @@
 import express from 'express';
+import morgan from 'morgan';
 import path from 'path';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
@@ -17,6 +18,11 @@ connectDB();
 
 //Initialising App
 const app = express();
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+
 app.use(express.json());
 
 //API routes
