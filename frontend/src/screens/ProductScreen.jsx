@@ -14,9 +14,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import Rating from './../components/Rating';
 import Rupee from './../components/Rupee';
 import { listProductDetails, reviewProduct } from './../actions/productActions';
-import { PRODUCT_CREATE_REVIEW_RESET } from './../constants/productConstants';
+import {
+  PRODUCT_CREATE_REVIEW_RESET,
+  PRODUCT_DETAILS_RESET,
+} from './../constants/productConstants';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 
 const ProductScreen = ({ match, history }) => {
   const [qty, setQty] = useState(1);
@@ -35,6 +39,7 @@ const ProductScreen = ({ match, history }) => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
+    dispatch({ type: PRODUCT_DETAILS_RESET });
     if (successReview) {
       setRating('');
       setComment('');
@@ -65,6 +70,7 @@ const ProductScreen = ({ match, history }) => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
+          <Meta title={product.name} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid></Image>
