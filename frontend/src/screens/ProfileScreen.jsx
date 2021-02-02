@@ -32,13 +32,13 @@ const ProfileScreen = ({ location, history }) => {
   const { loading: loadingOrder, error: errorOrder, orders } = orderListMy;
 
   useEffect(() => {
+    dispatch(listMyOrders());
     if (!userInfo) {
       history.push('/login');
     } else {
       if (!user || success) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails('profile'));
-        dispatch(listMyOrders());
       } else {
         setName(userInfo.name);
         setEmail(userInfo.email);
