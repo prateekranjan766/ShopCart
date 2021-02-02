@@ -5,7 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import CheckoutSteps from '../components/CheckoutSteps';
 import Message from './../components/Message';
 import Rupee from './../components/Rupee';
+import { emptyCart } from './../actions/cartActions';
 import { createOrder } from './../actions/orderActions';
+import { ORDER_CREATE_RESET } from '../constants/orderConstants';
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -31,8 +33,10 @@ const PlaceOrderScreen = ({ history }) => {
   const { success, error, order } = orderCreate;
 
   useEffect(() => {
+    dispatch({ type: ORDER_CREATE_RESET });
     if (success) {
       history.push(`/order/${order._id}`);
+      dispatch(emptyCart());
     }
     // eslint-disable-next-line
   }, [history, success]);
